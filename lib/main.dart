@@ -3,7 +3,12 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    ),
+  );
 }
 
 class Seat {
@@ -41,6 +46,7 @@ class _MyAppState extends State<MyApp> {
   List<Seat> seats = [];
   List<Seat> searchSeats = [];
   TextEditingController searchController = TextEditingController();
+  String searchedText = '0';
 
   Future<String> loadSeatsFromAsset() async {
     return await rootBundle.loadString('assets/seats.json');
@@ -75,18 +81,22 @@ class _MyAppState extends State<MyApp> {
         color: color,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               '$seatNo',
               style: const TextStyle(
                 color: Colors.white,
+                fontFamily: 'ProductSans',
+                fontSize: 20,
               ),
             ),
             Text(
               seats[seatNo - 1].type,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 13.9,
+                fontSize: 13,
+                fontFamily: 'Avenir',
               ),
             )
           ],
@@ -202,7 +212,7 @@ class _MyAppState extends State<MyApp> {
             child: ListBody(
               children: <Widget>[
                 Text('Type: ${seat.type}'),
-                Text('Status: ${seat.status}'),
+                Text('Status: ${seat.status.toUpperCase()}'),
               ],
             ),
           ),
@@ -222,13 +232,23 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Seat Booking',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Seat Booking'),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: const Text(
+            'Seat Finder',
+            style: TextStyle(
+              color: Colors.lightBlueAccent,
+              fontSize: 45,
+              fontFamily: 'Itim',
+            ),
+          ),
         ),
         body: Column(
           children: [
@@ -238,6 +258,7 @@ class _MyAppState extends State<MyApp> {
                 controller: searchController,
                 onChanged: (value) {
                   _searchSeats(value);
+                  searchedText = value;
                 },
                 decoration: InputDecoration(
                   hintText: 'Search by seat no, type or status',
@@ -256,16 +277,10 @@ class _MyAppState extends State<MyApp> {
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _buildRow(1),
-                            _buildRow(9),
-                            _buildRow(17),
-                            _buildRow(25),
-                            _buildRow(33),
-                            _buildRow(41),
-                            _buildRow(49),
-                            _buildRow(57),
-                          ],
+                          children: List.generate(
+                            9,
+                            (index) => _buildRow(index * 8 + 1),
+                          ),
                         ),
                       ),
                     ),
