@@ -70,9 +70,13 @@ class _MyAppState extends State<MyApp> {
     Color color = seats[seatNo - 1].status == 'booked'
         ? Colors.blueGrey
         : Colors.lightBlue;
+
     return InkWell(
       onTap: () {
-        searchController.text = seatNo.toString();
+        setState(() {
+          searchController.text = seatNo.toString();
+          color = Colors.blue;
+        });
         _showSeatDetails(seatNo);
       },
       child: Ink(
@@ -175,7 +179,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               subtitle: Text(
-                'Type: ${searchSeats[index].type} | Status: ${searchSeats[index].status}',
+                'Type: ${searchSeats[index].type} | Status: ${searchSeats[index].status.toUpperCase()}',
               ),
             );
           },
@@ -258,7 +262,9 @@ class _MyAppState extends State<MyApp> {
                 controller: searchController,
                 onChanged: (value) {
                   _searchSeats(value);
-                  searchedText = value;
+                  setState(() {
+                    searchedText = value;
+                  });
                 },
                 decoration: InputDecoration(
                   hintText: 'Search by seat no, type or status',
