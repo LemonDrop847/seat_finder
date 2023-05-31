@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   List<Seat> seats = [];
   List<Seat> searchSeats = [];
   TextEditingController searchController = TextEditingController();
-  String searchedText = '0';
+  String searchedText = '-1';
 
   Future<String> loadSeatsFromAsset() async {
     return await rootBundle.loadString('assets/seats.json');
